@@ -6,6 +6,12 @@ ffmpeg --help &>/dev/null
 if [ $? -eq 0 ]
 then
 	echo "ffmpeg found"
+	if [ $# -eq 0 ]
+	then
+		echo "Please årpvide video file to split and timinig file"
+	else
+		echo $@
+	fi
 else
 	echo "Please install ffmpeg"
 fi
