@@ -1,0 +1,11 @@
+#!/bin/bash
+#Sabryr 06-11-2020
+V=0.1
+
+ffmpeg --help &>/dev/null
+if [ $? -eq 0 ]
+then
+	echo "ffmpeg found"
+else
+	echo "Please install ffmpeg"
+fi
