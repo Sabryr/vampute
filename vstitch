@@ -8,7 +8,7 @@ function call_ffmpeg() {
 		  # take action on $line #
 		if [[ "$line" != \#* ]]
 		then
-			  echo "$line"
+			  echo "ffmpeg -i $1 $line"
 		fi
 	done < $2
  	#ffmpeg -i $1 -ss 0 -t 600 first-10-min.m4v
