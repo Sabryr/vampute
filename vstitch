@@ -2,21 +2,35 @@
 #Sabryr 06-11-2020
 V=0.1
 
+function call_ffmpeg() {
+	while IFS=  read -r line
+		do
+		  # take action on $line #
+		if [[ "$line" != \#* ]]
+		then
+			  echo "$line"
+		fi
+	done < $2
+ 	#ffmpeg -i $1 -ss 0 -t 600 first-10-min.m4v
+}
+
+
 ffmpeg --help &>/dev/null
 if [ $? -eq 0 ]
 then
-	echo "ffmpeg found"
+	#echo "ffmpeg found"
 	if [ $# -le 1 ]
 	then
 		echo "Please propvide video file to split and timinig file"
 	else
-		echo $@
+		#echo $@
 		if [[ -f "$1" ]]
 		then
-			echo "Video file "$1
+			#echo "Video file "$1
 			if [[ -f "$2" ]]
 			then
-				echo "Timing file "$2
+				#echo "Timing file "$2
+				call_ffmpeg $1 $2
 			else
 				echo "invalid file " $2
 			fi
