@@ -1,12 +1,17 @@
 #!/bin/bash
 #Sabryr 06-11-2020
 V=0.1
+TEMP_F=$(pwd)"/vmpute_tmp"
+echo $TEMP_F
 
 function call_ffmpeg(){
 	split_arr=("$@")
 	if [[ "${#split_arr[@]}" > 0 ]]
 	then
-		echo "OK"
+		for cmd in "${split_arr[@]}"
+		do
+			echo  $cmd
+		done
 	else
 		echo "Nothing to split, check the timing file"
 	fi
@@ -14,6 +19,10 @@ function call_ffmpeg(){
 
 function fabricate_ffmpeg() {
 	ffmpeg_split_arr=()
+	#check for exiting directories and warn
+	extension=$(basename $1 | awk -F . '{print $NF}')
+	mkdir $TEMP_F &>/dev/null
+	#rm -rf "$TEMP_F/*."
 	while IFS=  read -r line
 		do
 		  # take action on $line #
@@ -22,10 +31,9 @@ function fabricate_ffmpeg() {
 			IFS="," read -ra time_arr <<< "$line"
 			if [[ "${#time_arr[@]}" == 2 ]]
 			then
-				# ffmpeg -ss 00:00:00 -to 00:50:00 -i largefile.mp4 -acodec copy -vcodec copy smallfile.mp4
-				split_name="${time_arr[0]}-${time_arr[1]}-$1"
-				#echo "ffmpeg -ss ${time_arr[0]} -to ${time_arr[1]} - $1 -acodec copy -vcodec copy ${split_name}"
-				ffmpeg_split_arr+=("ffmpeg -ss ${time_arr[0]} -to ${time_arr[1]} - $1 -acodec copy -vcodec copy ${split_name}")
+				#ffmpeg -i samples/C_2020_Sep_24_zoom_0.mp4 -ss 00:10 -t 00:50 -acodec copy -vcodec copy split-1.mp4
+				split_name="$TEMP_F/${time_arr[0]}-${time_arr[1]}.${extension}"
+				ffmpeg_split_arr+=("ffmpeg -i $1 -ss ${time_arr[0]} -to ${time_arr[1]} acodec copy -vcodec copy ${split_name}")
 			else
 				echo "Error in line $line expected format START_TIME,END_TIME"
 			fi
