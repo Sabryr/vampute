@@ -28,10 +28,5 @@ The script requires two inputs:
 
 ## Timing file format
 
-START_TIME,END_TIME
-00:10,00:50
-01:10,01:50
-02:10,02:50
-
 A sample file timing.txt is provided with this
 
