@@ -1,12 +1,13 @@
 # vampute
-Video amputer is wrapper for ffmpeg. 
+Amputer is wrapper for ffmpeg. 
 
 [ffmpeg](https://ffmpeg.org/)
 
-This script can be used to remove parts of  
-a video. This was initially designed to support the processing of videos
+This script can be used to remove parts of  a video. This was 
+initially designed to support the processing of videos
 for [CodeRefinery project](https://coderefinery.org/).
-Specifically to remove parts of the video where the faces of participants are exposed
+Specifically to remove parts of the video where the faces of
+participants are exposed
 
 # Dependancies
 ffmpeg need to be installed first
