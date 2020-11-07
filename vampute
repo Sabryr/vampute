@@ -4,6 +4,18 @@ V=0.1
 TEMP_F=$(pwd)"/vmpute_tmp"
 echo $TEMP_F
 
+function call_stitch(){
+	#ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mp4
+	if [[ -f "$1" ]]
+	then
+		cmd="ffmpeg -f concat -safe 0 -i $1 -c copy $2"
+		eval "$cmd"
+	else
+ 		echo "Split file not found, $1"
+	fi
+	echo ""
+}
+
 function call_ffmpeg(){
 	split_arr=("$@")
 	if [[ "${#split_arr[@]}" > 0 ]]
@@ -23,6 +35,9 @@ function fabricate_ffmpeg() {
 	#check for exiting directories and warn
 	extension=$(basename $1 | awk -F . '{print $NF}')
 	mkdir $TEMP_F &>/dev/null
+	stitch_list=${TEMP_F}"/stitch.list"
+	echo "" > ${stitch_list}
+	outfile_nm="final.${extension}"
 	#rm -rf "$TEMP_F/*."
 	while IFS=  read -r line
 		do
@@ -35,12 +50,17 @@ function fabricate_ffmpeg() {
 				#ffmpeg -i samples/C_2020_Sep_24_zoom_0.mp4 -ss 00:10 -t 00:50 -acodec copy -vcodec copy split-1.mp4
 				split_name="$TEMP_F/${time_arr[0]}-${time_arr[1]}.${extension}"
 				ffmpeg_split_arr+=("ffmpeg -i $1 -ss ${time_arr[0]} -to ${time_arr[1]} -acodec copy -vcodec copy ${split_name}")
+				echo "file '"${split_name}"'" >> ${stitch_list}
 			else
 				echo "Error in line $line expected format START_TIME,END_TIME"
 			fi
 		fi
 	done < $2
 	call_ffmpeg "${ffmpeg_split_arr[@]}"
+	echo "-----------------------------------------" 
+	echo "-----------------------------------------" 
+	echo "-----------------------------------------" 
+	call_stitch ${stitch_list} ${outfile_nm}
  	#ffmpeg -i $1 -ss 0 -t 600 first-10-min.m4v
 }
 
