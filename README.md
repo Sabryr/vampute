@@ -12,7 +12,7 @@ participants are exposed
 # Dependancies
 ffmpeg need to be installed first
 
-## Ubuntu
+**Ubuntu**
  
  - sudo apt update
  - sudo apt install ffmpeg
