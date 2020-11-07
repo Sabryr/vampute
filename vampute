@@ -2,7 +2,18 @@
 #Sabryr 06-11-2020
 V=0.1
 
-function call_ffmpeg() {
+function call_ffmpeg(){
+	split_arr=("$@")
+	if [[ "${#split_arr[@]}" > 0 ]]
+	then
+		echo "OK"
+	else
+		echo "Nothing to split, check the timing file"
+	fi
+}
+
+function fabricate_ffmpeg() {
+	ffmpeg_split_arr=()
 	while IFS=  read -r line
 		do
 		  # take action on $line #
@@ -13,14 +24,15 @@ function call_ffmpeg() {
 			then
 				# ffmpeg -ss 00:00:00 -to 00:50:00 -i largefile.mp4 -acodec copy -vcodec copy smallfile.mp4
 				split_name="${time_arr[0]}-${time_arr[1]}-$1"
-				echo "ffmpeg -ss ${time_arr[0]} -to ${time_arr[1]} - $1 -acodec copy -vcodec copy ${split_name}"
+				#echo "ffmpeg -ss ${time_arr[0]} -to ${time_arr[1]} - $1 -acodec copy -vcodec copy ${split_name}"
+				ffmpeg_split_arr+=("ffmpeg -ss ${time_arr[0]} -to ${time_arr[1]} - $1 -acodec copy -vcodec copy ${split_name}")
 			else
 				echo "Error in line $line expected format START_TIME,END_TIME"
 			fi
 		fi
 	done < $2
+	call_ffmpeg "${ffmpeg_split_arr[@]}"
  	#ffmpeg -i $1 -ss 0 -t 600 first-10-min.m4v
-
 }
 
 
@@ -39,7 +51,7 @@ then
 			if [[ -f "$2" ]]
 			then
 				#echo "Timing file "$2
-				call_ffmpeg $1 $2
+				fabricate_ffmpeg $1 $2
 			else
 				echo "invalid file " $2
 			fi
