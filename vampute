@@ -90,5 +90,5 @@ then
 		fi
 	fi
 else
-	echo "Please install ffmpeg"
+	echo "Please install ffmpeg, e.g for Ubuntu use 'sudo apt install ffmpeg' "
 fi
