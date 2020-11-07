@@ -8,10 +8,19 @@ function call_ffmpeg() {
 		  # take action on $line #
 		if [[ "$line" != \#* ]]
 		then
-			  echo "ffmpeg -i $1 $line"
+			IFS="," read -ra time_arr <<< "$line"
+			if [[ "${#time_arr[@]}" == 2 ]]
+			then
+				# ffmpeg -ss 00:00:00 -to 00:50:00 -i largefile.mp4 -acodec copy -vcodec copy smallfile.mp4
+				split_name="${time_arr[0]}-${time_arr[1]}-$1"
+				echo "ffmpeg -ss ${time_arr[0]} -to ${time_arr[1]} - $1 -acodec copy -vcodec copy ${split_name}"
+			else
+				echo "Error in line $line expected format START_TIME,END_TIME"
+			fi
 		fi
 	done < $2
  	#ffmpeg -i $1 -ss 0 -t 600 first-10-min.m4v
+
 }
 
 
